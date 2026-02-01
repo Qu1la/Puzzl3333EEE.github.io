@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>VESSEL ASSESSMENT</title>
+  <style>
+    body {
+      background: #0b0b0b;
+      color: #e0e0e0;
+      font-family: monospace;
+      padding: 30px;
+    }
+    .unit {
+      margin-bottom: 20px;
+    }
+    button {
+      background: #222;
+      color: #e0e0e0;
+      border: 1px solid #555;
+      padding: 6px 12px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+    button.active {
+      background: #555;
+    }
+    #result {
+      margin-top: 30px;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+
+<h1>VESSEL ASSESSMENT</h1>
+<p>Select placement for each component:</p>
+
+<div class="unit">
+  <strong>Vessel</strong><br>
+  <button onclick="setChoice('vessel','earth',this)">Earth</button>
+  <button onclick="setChoice('vessel','heaven',this)">Heaven</button>
+</div>
+
+<div class="unit">
+  <strong>Brain</strong><br>
+  <button onclick="setChoice('brain','earth',this)">Earth</button>
+  <button onclick="setChoice('brain','heaven',this)">Heaven</button>
+</div>
+
+<div class="unit">
+  <strong>Heart</strong><br>
+  <button onclick="setChoice('heart','earth',this)">Earth</button>
+  <button onclick="setChoice('heart','heaven',this)">Heaven</button>
+</div>
+
+<button onclick="evaluate()">Confirm Decision</button>
+
+<div id="result"></div>
+
+<script>
+  // Luau-style simple logic (all in one)
+  local choice = {}
+
+  function setChoice(part, place, btn) {
+    choice[part] = place
+
+    -- reset buttons
+    local buttons = btn.parentNode.querySelectorAll("button")
+    buttons.forEach(function(b) b.classList.remove("active") end)
+    btn.classList.add("active")
+  end
+
+  function evaluate()
+    if not choice.vessel or not choice.brain or not choice.heart then
+      document.getElementById("result").innerText =
+        "Assessment incomplete."
+      return
+    end
+
+    -- Mae's correct config
+    if choice.vessel == "earth" and choice.brain == "earth" and choice.heart == "heaven" then
+      document.getElementById("result").innerText =
+        "Assessment recorded. No further action required."
+    -- Davin's detected config
+    elseif choice.vessel == "earth" and choice.brain == "heaven" and choice.heart == "earth" then
+      document.getElementById("result").innerText =
+        "Assessment recorded. User detected. Access revoked."
+      document.querySelectorAll("button").forEach(function(b) b.disabled = true end)
+    else
+      document.getElementById("result").innerText =
+        "Assessment recorded. Review pending."
+    end
+  end
+</script>
+
+</body>
+</html>
